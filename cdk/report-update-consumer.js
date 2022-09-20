@@ -13,7 +13,6 @@ const {
 const { VectorCdkLambdaEventErrorHandlerStrategy } = cdkUtilsLambda;
 const {
     SUMMARY_FIELDS_UPDATE_STREAM_NAME,
-    TEST_SCHEMA_DIR,
     SQS_QUEUE_URL
 } = require('../src/config');
 
@@ -31,9 +30,9 @@ class reportUpdateConsumerService extends constructs.Construct {
           scope,
           'reportUpdateConsumer',
           {
-              description: 'Lambda function for redox integration',
+              description: 'Lambda function for report updates',
               runtime: lambda.Runtime.NODEJS_14_X,
-              entry: 'server.js',
+              entry: './src/handler.js',
               handler: 'server',
               memorySize: ssm.StringParameter.valueForStringParameter(
                   this,
@@ -58,7 +57,7 @@ class reportUpdateConsumerService extends constructs.Construct {
               },
               environment: {
                   CDK_APP: 'true',
-                  SQS_REDOX_QUEUE_URL: queue.queueUrl,
+                  SQS_QUEUE_URL: queue.queueUrl,
                   ...setEnvironments(scope)
               },
               timeout: core.Duration.seconds(300),
