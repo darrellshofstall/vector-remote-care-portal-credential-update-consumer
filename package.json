@@ -1,0 +1,30 @@
+{
+    "name": "vector-base-node-cdk",
+    "version": "1.0.0",
+    "description": "An example base cdk node project for Vector.",
+    "main": "index.js",
+    "scripts": {
+        "cdk": "cdk",
+        "synth": "rm -rf cdk.out && npx cdk synth",
+        "lint": "npx eslint .",
+        "lint:fix": "npx eslint . --fix",
+        "test": "jest --verbose",
+        "main": "node index.js",
+        "prepare": "husky install"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {},
+    "devDependencies": {
+        "esbuild": "^0.12.2",
+        "eslint": "^6.8.0",
+        "eslint-config-prettier": "^6.15.0",
+        "eslint-plugin-jest": "^24.4.2",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-prettier": "^3.1.4",
+        "husky": "^6.0.0",
+        "jest": "^27.2.4",
+        "prettier": "^1.19.1",
+        "@vector-remote-care/cdk-utils": "^3.0.6"
+    }
+}

@@ -1,0 +1,28 @@
+{
+    "env": {
+        "node": true,
+        "commonjs": true,
+        "es6": true,
+        "jest/globals": true
+    },
+    "plugins": ["node", "prettier", "jest"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:node/recommended",
+        "prettier" //disables rules that conflict with Prettier. Must be last in the extends array
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018
+    },
+    "rules": {
+        "prettier/prettier": ["error", { "singleQuote": true }], // adds a rule that formats content using Prettier
+        "node/no-unpublished-require": "off",
+        "node/no-unpublished-import": "off",
+        "node/no-missing-require": "off",
+        "node/no-extraneous-require": "off"
+    }
+}

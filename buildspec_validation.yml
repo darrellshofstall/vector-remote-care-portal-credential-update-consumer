@@ -1,0 +1,41 @@
+# NOTE: buildspec_validation.yml is used only for validating code by running lint checks and unit tests.
+
+# Do not change version. This is the version of aws buildspec, not the version of your buldspec file.
+version: 0.2
+
+env:
+  parameter-store:
+    NODE_ENV: "/code-build/general/NODE_ENV"
+    GITHUB_ACCESS_TOKEN: "/code-build/general/GITHUB_ACCESS_TOKEN"
+    DATABASE_HOST_TEST: "/code-build/general/DATABASE_HOST_TEST"
+    DATABASE_NAME_TEST_ROOT: "/code-build/general/DATABASE_NAME_TEST"
+    DATABASE_PASSWORD_TEST: "/code-build/general/DATABASE_PASSWORD_TEST"
+    DATABASE_USER_TEST: "/code-build/general/DATABASE_USER_TEST"
+    DATABASE_LOGGING: "/code-build/general/DATABASE_LOGGING"
+    MODEL_CHANGE_LOGGING: "/code-build/general/MODEL_CHANGE_LOGGING"
+    GPR_READ_TOKEN: '/code-build/general/GPR_READ_TOKEN'
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+    commands:
+      # Config NPM private registry
+      - npm config set @vector-remote-care:registry https://npm.pkg.github.com
+      - npm config set //npm.pkg.github.com/:_authToken ${GPR_READ_TOKEN}
+      # Install project
+      - git config --global url."https://${GITHUB_ACCESS_TOKEN}@github.com/".insteadOf https://github.com/
+      - echo Installing source NPM dependencies...
+      - npm cache clean --force
+      - npm install npm@latest -g
+      - npm install #--production
+  pre_build:
+    commands:
+      - echo Running lint check...
+      - npm run lint
+      - npx @vector-remote-care/compliance-checker
+      - echo 'Running tests (No Tests to Run!)...'
+      # - npm run test
+  build:
+    commands:
+      - echo Nothing to build in Code Validation Build. Move along.

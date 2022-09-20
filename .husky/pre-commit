@@ -1,0 +1,6 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+npm run lint
+npx @vector-remote-care/compliance-checker
+git diff --quiet HEAD $REF -- bin cdk || npm run cdk synth
