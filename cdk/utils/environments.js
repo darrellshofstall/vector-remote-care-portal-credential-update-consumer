@@ -13,16 +13,6 @@ const setEnvironments = stack => {
             cdk.Stack.of(stack).account
         }:secret:db-password`
     });
-
-    environments.GPR_READ_TOKEN = ssm.StringParameter.valueForStringParameter(
-        stack,
-        '/code-build/general/GPR_READ_TOKEN'
-    );
-    environments.GITHUB_ACCESS_TOKEN = ssm.StringParameter.valueForStringParameter(
-        stack,
-        '/code-build/general/GITHUB_ACCESS_TOKEN'
-    );
-
     environments.DATABASE_HOST = secret
         .secretValueFromJson('host')
         .unsafeUnwrap();
