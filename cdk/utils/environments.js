@@ -1,6 +1,5 @@
 const cdk = require('aws-cdk-lib');
 const ssm = require('aws-cdk-lib/aws-ssm');
-const { repositoryName } = require('../repository');
 const sm = require('aws-cdk-lib/aws-secretsmanager');
 
 let globalEnvironments = new Map();
@@ -14,6 +13,7 @@ const setEnvironments = stack => {
             cdk.Stack.of(stack).account
         }:secret:db-password`
     });
+
     environments.GPR_READ_TOKEN = ssm.StringParameter.valueForStringParameter(
         stack,
         '/code-build/general/GPR_READ_TOKEN'

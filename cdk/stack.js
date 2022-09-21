@@ -1,8 +1,6 @@
 const cdk = require('aws-cdk-lib');
 const cdkUtils = require('@vector-remote-care/cdk-utils');
-const {
-  ReportUpdateConsumerService
-} = require('./report-update-consumer');
+const { ReportUpdateConsumerService } = require('./report-update-consumer');
 class DeploymentStack extends cdk.Stack {
     /**
      *
@@ -13,7 +11,9 @@ class DeploymentStack extends cdk.Stack {
     constructor(scope, id, props) {
         super(scope, id, props);
         const vpc = cdkUtils.vpc.getVPC(this);
-        new ReportUpdateConsumerService(this, 'reportUpdateConsumerService', {vpc})
+        new ReportUpdateConsumerService(this, 'reportUpdateConsumerService', {
+            vpc
+        });
         // ADD CDK RESOURCES
     }
 }

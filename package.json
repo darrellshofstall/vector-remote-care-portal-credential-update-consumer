@@ -3,6 +3,9 @@
     "version": "1.0.0",
     "description": "An example base cdk node project for Vector.",
     "main": "index.js",
+    "engines": {
+      "node": "14.19.1"
+  },
     "scripts": {
         "cdk": "cdk",
         "synth": "rm -rf cdk.out && npx cdk synth",
@@ -14,7 +17,9 @@
     },
     "author": "",
     "license": "ISC",
-    "dependencies": {},
+    "dependencies": {
+        "vector-sequelize-model": "git+https://github.com/vector-remote-care/vector-sequelize-model.git#semver:v3.0.33"
+    },
     "devDependencies": {
         "esbuild": "^0.12.2",
         "eslint": "^6.8.0",
