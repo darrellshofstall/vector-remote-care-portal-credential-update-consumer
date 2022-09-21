@@ -16,7 +16,7 @@ const {
     SQS_QUEUE_URL
 } = require('../src/config');
 
-class reportUpdateConsumerService extends constructs.Construct {
+class ReportUpdateConsumerService extends constructs.Construct {
     constructor(scope, id, props) {
         super(scope, id, props);
         const timeout = core.Duration.seconds(30);
@@ -48,11 +48,7 @@ class reportUpdateConsumerService extends constructs.Construct {
                   commandHooks: {
                       beforeBundling() {},
                       beforeInstall() {},
-                      afterBundling(inputDir, outputDir) {
-                          return [
-                              `cp -r ${inputDir}/src/lib/templates ${outputDir}`
-                          ];
-                      }
+                      afterBundling() {}
                   }
               },
               environment: {
@@ -96,4 +92,4 @@ class reportUpdateConsumerService extends constructs.Construct {
     }
 }
 
-module.exports = { reportUpdateConsumerService };
+module.exports = { ReportUpdateConsumerService };
