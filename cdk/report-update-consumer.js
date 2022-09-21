@@ -19,13 +19,6 @@ const {
 class ReportUpdateConsumerService extends constructs.Construct {
     constructor(scope, id, props) {
         super(scope, id, props);
-        const timeout = core.Duration.seconds(30);
-        const queue = new sqs.Queue(this, 'reportUpdateConsumer', {
-            queueName: 'reportUpdateConsumer',
-            visibilityTimeout: timeout
-        });
-
-
         const reportUpdateConsumerLambda = new nodeLambda.NodejsFunction(
           scope,
           'reportUpdateConsumer',
@@ -56,7 +49,6 @@ class ReportUpdateConsumerService extends constructs.Construct {
                   SQS_QUEUE_URL: queue.queueUrl,
                   ...setEnvironments(scope)
               },
-              timeout: core.Duration.seconds(300),
               vpc: props.vpc,
               allowAllOutbound: true
           }
@@ -72,17 +64,6 @@ class ReportUpdateConsumerService extends constructs.Construct {
                 strategy: VectorCdkLambdaEventErrorHandlerStrategy.SQS_RETRY
             }
         });
-
-        reportUpdateConsumerLambda.addEventSource(
-            new eventsource.SqsEventSource(queue)
-        );
-
-        // METRICS
-        cdkUtilsSQS.metric.addQueueMetrics(
-            this,
-            queue,
-            'reportUpdateConsumer'
-        );
 
         cdkUtilsLambda.addLambdaMetrics(
             this,
