@@ -10,10 +10,7 @@ const {
     VectorCdkLambdaEventErrorHandlerStrategy,
     VectorCdkLambdaEvent
 } = cdkUtilsLambda;
-const {
-    SUMMARY_FIELDS_UPDATE_STREAM_NAME,
-    SQS_QUEUE_URL
-} = require('../src/config');
+const { SUMMARY_FIELDS_UPDATE_STREAM_NAME } = require('../src/config');
 
 class ReportUpdateConsumerService extends constructs.Construct {
     constructor(scope, id, props) {
@@ -65,9 +62,6 @@ class ReportUpdateConsumerService extends constructs.Construct {
             consumerGroup: 'coversheet-consumer-group',
             topic: SUMMARY_FIELDS_UPDATE_STREAM_NAME,
             errorHandler: {
-                envVars: {
-                    envVarSqsQueueUrl: SQS_QUEUE_URL
-                },
                 strategy: VectorCdkLambdaEventErrorHandlerStrategy.SQS_RETRY
             }
         });
