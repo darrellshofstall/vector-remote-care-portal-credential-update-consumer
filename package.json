@@ -4,8 +4,8 @@
     "description": "An example base cdk node project for Vector.",
     "main": "index.js",
     "engines": {
-      "node": "14.19.1"
-  },
+        "node": "14.19.1"
+    },
     "scripts": {
         "cdk": "cdk",
         "synth": "rm -rf cdk.out && npx cdk synth",
@@ -30,6 +30,6 @@
         "husky": "^6.0.0",
         "jest": "^27.2.4",
         "prettier": "^1.19.1",
-        "@vector-remote-care/cdk-utils": "^3.0.6"
+        "@vector-remote-care/cdk-utils": "^3.1.10"
     }
 }
