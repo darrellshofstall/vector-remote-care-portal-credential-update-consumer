@@ -2,13 +2,18 @@ const reportGetters = require('./database/get/report');
 const clinicGetters = require('./database/get/clinic');
 const utils = require('./utils');
 const { hasRequiredColumns, coversheetDatesMatch } = utils;
-const { getClinicIntegrationSettings } = clinicGetters;
+const {
+    getClinicIntegrationSettings,
+    getClinicById,
+    getClinicRedoxDestination
+} = clinicGetters;
 const { getReportById } = reportGetters;
 
 module.exports.handler = async event => {
     console.log(event);
     const { reportId, clinicId } = event;
-    const clinicSettings = await getClinicIntegrationSettings(clinicId);
+    const clinic = await getClinicById(clinicId);
+    const clinicSettings = await getClinicIntegrationSettings(clinic);
     if (!clinicSettings.isRedoxIntegrationEnabled) {
         console.log(
             `Redox integration is not enabled for clinicId ${clinicId}`
@@ -21,9 +26,15 @@ module.exports.handler = async event => {
         return;
     }
     if (hasRequiredColumns(report, clinicSettings)) {
+        const redoxDestination = await getClinicRedoxDestination(
+            clinic,
+            'media'
+        );
+        if (redoxDestination) {
+            // check if there are pending or failed transmissions
+            // queue the redox transmission
+            // write a row in the transmissions table
+        }
         // get clinics media destinations
-        // check if there are pending or failed transmissions
-        // queue the redox transmission
-        // write a row in the transmissions table
     }
 };
