@@ -1,7 +1,7 @@
 const reportGetters = require('./database/get/report');
 const clinicGetters = require('./database/get/clinic');
 const utils = require('./utils');
-const { hasRequiredColumns } = utils;
+const { hasRequiredColumns, coversheetDatesMatch } = utils;
 const { getClinicIntegrationSettings } = clinicGetters;
 const { getReportById } = reportGetters;
 
@@ -16,8 +16,11 @@ module.exports.handler = async event => {
         return;
     }
     const report = await getReportById(reportId);
+    if (!coversheetDatesMatch(report)) {
+        console.log('Coversheet dates dont match');
+        return;
+    }
     if (hasRequiredColumns(report, clinicSettings)) {
-        // check that the coversheet dates match
         // get clinics media destinations
         // check if there are pending or failed transmissions
         // queue the redox transmission

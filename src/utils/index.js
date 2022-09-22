@@ -21,7 +21,18 @@ function hasRequiredColumns(report, clinicSettings) {
         return isPassing;
     });
 }
+/**
+ * Compares the reports coversheet_last_requested_at and coversheet_updated_at to make sure they are the same
+ * @param {object} report
+ * @returns {boolean}
+ */
+function coversheetDatesMatch(report) {
+    return report.coversheetUpdatedAt && report.coversheetLastRequestedAt
+        ? report.coversheetUpdatedAt === report.coversheetLastRequestedAt
+        : false;
+}
 
 module.exports = {
-    hasRequiredColumns
+    hasRequiredColumns,
+    coversheetDatesMatch
 };

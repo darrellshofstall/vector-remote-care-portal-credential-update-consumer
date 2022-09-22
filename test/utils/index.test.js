@@ -46,3 +46,35 @@ describe('isReportSendable', () => {
         });
     });
 });
+describe('coversheetDatesMatch', () => {
+    describe('coversheet dates match and are not null', () => {
+        test('should return true', () => {
+            const report = {
+                coversheetUpdatedAt: '01-01-2022',
+                coversheetLastRequestedAt: '01-01-2022'
+            };
+            const res = utils.coversheetDatesMatch(report);
+            expect(res).toBe(true);
+        });
+    });
+    describe('coversheet dates do not match', () => {
+        test('should return false', () => {
+            const report = {
+                coversheetUpdatedAt: '01-01-2022',
+                coversheetLastRequestedAt: '01-02-2022'
+            };
+            const res = utils.coversheetDatesMatch(report);
+            expect(res).toBe(false);
+        });
+    });
+    describe('coversheet dates are null', () => {
+        test('should return false', () => {
+            const report = {
+                coversheetUpdatedAt: null,
+                coversheetLastRequestedAt: null
+            };
+            const res = utils.coversheetDatesMatch(report);
+            expect(res).toBe(false);
+        });
+    });
+});
