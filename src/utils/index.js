@@ -9,7 +9,7 @@ const settingReportMap = {
  * @param {object} clinicSettings
  * @returns {boolean}
  */
-function isReportSendable(report, clinicSettings) {
+function hasRequiredColumns(report, clinicSettings) {
     return Object.keys(settingReportMap).every(key => {
         const reportColumn = settingReportMap[key];
         let isPassing = false;
@@ -23,5 +23,5 @@ function isReportSendable(report, clinicSettings) {
 }
 
 module.exports = {
-    isReportSendable
+    hasRequiredColumns
 };

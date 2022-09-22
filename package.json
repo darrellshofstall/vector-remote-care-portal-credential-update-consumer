@@ -12,6 +12,7 @@
         "lint": "npx eslint .",
         "lint:fix": "npx eslint . --fix",
         "test": "jest --verbose",
+        "test:coverage": "jest --verbose --runInBand --coverage",
         "main": "node index.js",
         "prepare": "husky install"
     },

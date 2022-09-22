@@ -1,7 +1,7 @@
 const reportGetters = require('./database/get/report');
 const clinicGetters = require('./database/get/clinic');
 const utils = require('./utils');
-const { isReportSendable } = utils;
+const { hasRequiredColumns } = utils;
 const { getClinicIntegrationSettings } = clinicGetters;
 const { getReportById } = reportGetters;
 
@@ -16,7 +16,7 @@ module.exports.handler = async event => {
         return;
     }
     const report = await getReportById(reportId);
-    if (isReportSendable(report, clinicSettings)) {
+    if (hasRequiredColumns(report, clinicSettings)) {
         // check that the coversheet dates match
         // get clinics media destinations
         // check if there are pending or failed transmissions
