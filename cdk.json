@@ -4,7 +4,7 @@
     "aws-cdk:enableDiffNoFail": "true",
     "@aws-cdk/core:stackRelativeExports": "true",
     "@aws-cdk/core:newStyleStackSynthesis": true,
-    "REPOSITORY_NAME": "vector-base-node-cdk",
+    "REPOSITORY_NAME": "vector-report-update-consumer",
     "BRANCH_NAME": "synth"
   }
 }

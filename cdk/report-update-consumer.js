@@ -10,7 +10,7 @@ const {
     VectorCdkLambdaEventErrorHandlerStrategy,
     VectorCdkLambdaEvent
 } = cdkUtilsLambda;
-const { SUMMARY_FIELDS_UPDATE_STREAM_NAME } = require('../src/config');
+const { REPORT_UPDATE_STREAM_NAME } = require('../src/config');
 
 class ReportUpdateConsumerService extends constructs.Construct {
     constructor(scope, id, props) {
@@ -29,7 +29,7 @@ class ReportUpdateConsumerService extends constructs.Construct {
                 description: 'Lambda function for report updates',
                 runtime: lambda.Runtime.NODEJS_14_X,
                 entry: './src/handler.js',
-                handler: 'server',
+                handler: 'handler',
                 memorySize: ssm.StringParameter.valueForStringParameter(
                     this,
                     `/${repositoryName}/config/lambda-memory`
@@ -59,8 +59,8 @@ class ReportUpdateConsumerService extends constructs.Construct {
         );
 
         reportUpdateConsumerLambda.makeEventConsumer({
-            consumerGroup: 'coversheet-consumer-group',
-            topic: SUMMARY_FIELDS_UPDATE_STREAM_NAME,
+            consumerGroup: 'report-update-consumer-group',
+            topic: REPORT_UPDATE_STREAM_NAME,
             errorHandler: {
                 strategy: VectorCdkLambdaEventErrorHandlerStrategy.SQS_RETRY
             }
