@@ -1,53 +1,19 @@
-const reportGetters = require('./database/get/report');
-const clinicGetters = require('./database/get/clinic');
-const redoxTransmissionGetters = require('./database/get/redoxTransmission');
-const utils = require('./utils');
-const { hasRequiredColumns, coversheetDatesMatch } = utils;
 const {
-    getClinicIntegrationSettings,
-    getClinicById,
-    getClinicRedoxDestination
-} = clinicGetters;
-const { getReportTransmission } = redoxTransmissionGetters;
-const { getReportById } = reportGetters;
+    VectorEventConsumer,
+    VectorEventErrorHandlerSQSRetry
+} = require('@vector-remote-care/event-client');
+const { TEST_SCHEMA_DIR, SQS_QUEUE_URL } = require('./config');
+const { sendReport } = require('./reportChecker');
+const SCHEMA_REGISTRY_CONFIG = process.env.TEST
+    ? { schemaDirName: TEST_SCHEMA_DIR }
+    : {};
 
 module.exports.handler = async event => {
-    console.log(event);
-    const { reportId, clinicId } = event;
-    const clinic = await getClinicById(clinicId);
-    const clinicSettings = await getClinicIntegrationSettings(clinic);
-    if (!clinicSettings.isRedoxIntegrationEnabled) {
-        console.log(
-            `Redox integration is not enabled for clinicId ${clinicId}`
-        );
-        return;
-    }
-    const report = await getReportById(reportId);
-    if (!coversheetDatesMatch(report)) {
-        console.log('Coversheet dates dont match');
-        return;
-    }
-    if (hasRequiredColumns(report, clinicSettings)) {
-        const redoxDestination = await getClinicRedoxDestination(
-            clinic,
-            'media'
-        );
-        if (!redoxDestination) {
-            console.log('No media destination found');
-            return;
-        }
-        const transmission = await getReportTransmission(
-            report.id,
-            redoxDestination.id
-        );
-        if (
-            transmission.status !== 'pending' ||
-            transmission.status !== 'failed'
-        ) {
-            // create transmission row and queue transmission
-        }
-        // check if there are pending or failed transmissions
-        // queue the redox transmission
-        // write a row in the transmissions table
-    }
+    const consumer = new VectorEventConsumer({
+        schemaRegistryConfig: SCHEMA_REGISTRY_CONFIG,
+        errorHandler: new VectorEventErrorHandlerSQSRetry({
+            sqsQueueUrl: process.env[SQS_QUEUE_URL]
+        })
+    });
+    await consumer.consume(event.Records, sendReport);
 };
