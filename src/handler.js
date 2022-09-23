@@ -1,5 +1,6 @@
 const reportGetters = require('./database/get/report');
 const clinicGetters = require('./database/get/clinic');
+const redoxTransmissionGetters = require('./database/get/redoxTransmission');
 const utils = require('./utils');
 const { hasRequiredColumns, coversheetDatesMatch } = utils;
 const {
@@ -7,6 +8,7 @@ const {
     getClinicById,
     getClinicRedoxDestination
 } = clinicGetters;
+const { getReportTransmission } = redoxTransmissionGetters;
 const { getReportById } = reportGetters;
 
 module.exports.handler = async event => {
@@ -34,7 +36,16 @@ module.exports.handler = async event => {
             console.log('No media destination found');
             return;
         }
-
+        const transmission = await getReportTransmission(
+            report.id,
+            redoxDestination.id
+        );
+        if (
+            transmission.status !== 'pending' ||
+            transmission.status !== 'failed'
+        ) {
+            // create transmission row and queue transmission
+        }
         // check if there are pending or failed transmissions
         // queue the redox transmission
         // write a row in the transmissions table
