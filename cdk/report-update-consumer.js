@@ -59,7 +59,7 @@ class ReportUpdateConsumerService extends constructs.Construct {
         );
 
         reportUpdateConsumerLambda.makeEventConsumer({
-            consumerGroup: 'coversheet-consumer-group',
+            consumerGroup: 'report-update-consumer-group',
             topic: SUMMARY_FIELDS_UPDATE_STREAM_NAME,
             errorHandler: {
                 strategy: VectorCdkLambdaEventErrorHandlerStrategy.SQS_RETRY
