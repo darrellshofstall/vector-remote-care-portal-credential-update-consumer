@@ -29,7 +29,7 @@ class ReportUpdateConsumerService extends constructs.Construct {
                 description: 'Lambda function for report updates',
                 runtime: lambda.Runtime.NODEJS_14_X,
                 entry: './src/handler.js',
-                handler: 'server',
+                handler: 'handler',
                 memorySize: ssm.StringParameter.valueForStringParameter(
                     this,
                     `/${repositoryName}/config/lambda-memory`
