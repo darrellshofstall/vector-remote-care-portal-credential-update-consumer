@@ -63,9 +63,37 @@ async function getClinicBooleanSetting(clinic, settingName) {
     return await clinic.getBooleanSetting(settingName);
 }
 
+async function getClinicAndSettings(clinicId) {
+    const clinic = await getClinicById(clinicId);
+    const clinicSettings = await getClinicIntegrationSettings(clinic);
+    if (!clinicSettings.isRedoxIntegrationEnabled) {
+        const error = `Redox integration is not enabled for clinicId ${clinicId}`;
+        throw new Error(error);
+    }
+    return { clinic, clinicSettings };
+}
+/**
+ *
+ * @param {object} clinic
+ * @returns {object}
+ */
+async function getClinicMediaDestination(clinic) {
+    const redoxDestination = await getClinicRedoxDestination(clinic, [
+        'media',
+        'media-tiff'
+    ]);
+    if (!redoxDestination) {
+        const error = 'No media destination found';
+        throw new Error(error);
+    }
+    return redoxDestination;
+}
+
 module.exports = {
     getClinicRedoxDestination,
     getClinicIntegrationSettings,
     getClinicBooleanSetting,
-    getClinicById
+    getClinicById,
+    getClinicAndSettings,
+    getClinicMediaDestination
 };

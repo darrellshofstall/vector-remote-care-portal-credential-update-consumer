@@ -1,42 +1,13 @@
 const clinicGetters = require('../database/read/clinic');
 const { getClinicRedoxDestination } = clinicGetters;
-const settingReportMap = {
-    isRedoxReportReviewEnabled: 'clinicReviewedAt',
-    isCoversheetSignatureEnabled: 'clinicSignedAt'
-};
+const sqs = require('../aws/sqs');
+const { sendMessage } = sqs;
+
 const redoxNamePathMap = {
     media: '/send-media-transmission',
     'media-tiff': '/send-media-tiff-transmission'
 };
 
-/**
- * Takes a clinic's settings and make sure the corresponding report columns are truthy
- * @param {number} report
- * @param {object} clinicSettings
- * @returns {boolean}
- */
-function hasRequiredColumns(report, clinicSettings) {
-    return Object.keys(settingReportMap).every(key => {
-        const reportColumn = settingReportMap[key];
-        let isPassing = false;
-        if (!clinicSettings[key]) {
-            isPassing = true;
-        } else {
-            isPassing = !!report[reportColumn];
-        }
-        return isPassing;
-    });
-}
-/**
- * Compares the reports coversheet_last_requested_at and coversheet_updated_at to make sure they are the same
- * @param {object} report
- * @returns {boolean}
- */
-function coversheetDatesMatch(report) {
-    return report.coversheetUpdatedAt && report.coversheetLastRequestedAt
-        ? report.coversheetUpdatedAt === report.coversheetLastRequestedAt
-        : false;
-}
 /**
  *
  * @param {number} reportId
@@ -74,8 +45,17 @@ function getRedoxSqsPath(redoxDestination) {
     return redoxNamePathMap[key];
 }
 
+async function buidAndSendSqsMessage(reportId, clinic, redoxDestination) {
+    const messageBody = await buildSqsMessageBody(
+        reportId,
+        clinic,
+        redoxDestination
+    );
+    await sendMessage(messageBody, 'url', 300);
+}
+
 module.exports = {
-    hasRequiredColumns,
-    coversheetDatesMatch,
-    buildSqsMessageBody
+    getRedoxSqsPath,
+    buildSqsMessageBody,
+    buidAndSendSqsMessage
 };
