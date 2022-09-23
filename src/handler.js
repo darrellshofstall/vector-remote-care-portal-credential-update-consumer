@@ -30,11 +30,13 @@ module.exports.handler = async event => {
             clinic,
             'media'
         );
-        if (redoxDestination) {
-            // check if there are pending or failed transmissions
-            // queue the redox transmission
-            // write a row in the transmissions table
+        if (!redoxDestination) {
+            console.log('No media destination found');
+            return;
         }
-        // get clinics media destinations
+
+        // check if there are pending or failed transmissions
+        // queue the redox transmission
+        // write a row in the transmissions table
     }
 };
