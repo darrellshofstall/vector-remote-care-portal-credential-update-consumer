@@ -10,7 +10,7 @@ const {
     VectorCdkLambdaEventErrorHandlerStrategy,
     VectorCdkLambdaEvent
 } = cdkUtilsLambda;
-const { SUMMARY_FIELDS_UPDATE_STREAM_NAME } = require('../src/config');
+const { REPORT_UPDATE_STREAM_NAME } = require('../src/config');
 
 class ReportUpdateConsumerService extends constructs.Construct {
     constructor(scope, id, props) {
@@ -60,7 +60,7 @@ class ReportUpdateConsumerService extends constructs.Construct {
 
         reportUpdateConsumerLambda.makeEventConsumer({
             consumerGroup: 'report-update-consumer-group',
-            topic: SUMMARY_FIELDS_UPDATE_STREAM_NAME,
+            topic: REPORT_UPDATE_STREAM_NAME,
             errorHandler: {
                 strategy: VectorCdkLambdaEventErrorHandlerStrategy.SQS_RETRY
             }
