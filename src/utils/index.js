@@ -1,6 +1,12 @@
+const clinicGetters = require('../database/read/clinic');
+const { getClinicRedoxDestination } = clinicGetters;
 const settingReportMap = {
     isRedoxReportReviewEnabled: 'clinicReviewedAt',
     isCoversheetSignatureEnabled: 'clinicSignedAt'
+};
+const redoxNamePathMap = {
+    media: '/send-media-transmission',
+    'media-tiff': '/send-media-tiff-transmission'
 };
 
 /**
@@ -31,8 +37,45 @@ function coversheetDatesMatch(report) {
         ? report.coversheetUpdatedAt === report.coversheetLastRequestedAt
         : false;
 }
+/**
+ *
+ * @param {number} reportId
+ * @param {object} clinic
+ * @param {object} redoxDestination
+ * @returns {object}
+ */
+async function buildSqsMessageBody(reportId, clinic, redoxDestination) {
+    const clinicRedoxSearchDestination = await getClinicRedoxDestination(
+        clinic,
+        'search'
+    );
+    return {
+        path: getRedoxSqsPath(redoxDestination),
+        httpMethod: 'POST',
+        queryStringParameters: {
+            reportId,
+            clinicRedoxDestinationId: redoxDestination.id,
+            clinicRedoxSearchDestinationId: clinicRedoxSearchDestination
+                ? clinicRedoxSearchDestination.id
+                : null
+        }
+    };
+}
+/**
+ *
+ * @param {object} redoxDestination
+ * @returns {string}
+ */
+function getRedoxSqsPath(redoxDestination) {
+    if (!redoxDestination) {
+        throw new Error('No Redox destination provided');
+    }
+    const key = redoxDestination.RedoxModelType.name;
+    return redoxNamePathMap[key];
+}
 
 module.exports = {
     hasRequiredColumns,
-    coversheetDatesMatch
+    coversheetDatesMatch,
+    buildSqsMessageBody
 };

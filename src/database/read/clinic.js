@@ -34,7 +34,6 @@ async function getClinicById(clinicId) {
 /**
  *
  * @param {object} clinic
- * @param {string} modelName
  * @returns {object}
  */
 async function getClinicRedoxDestination(clinic, modelName) {

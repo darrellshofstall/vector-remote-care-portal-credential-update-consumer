@@ -1,8 +1,11 @@
-const reportGetters = require('./database/get/report');
-const clinicGetters = require('./database/get/clinic');
-const redoxTransmissionGetters = require('./database/get/redoxTransmission');
+const reportGetters = require('./database/read/report');
+const clinicGetters = require('./database/read/clinic');
+const redoxTransmissionCreate = require('./database/create/redoxTransmission');
+const redoxTransmissionGetters = require('./database/read/redoxTransmission');
 const utils = require('./utils');
-const { hasRequiredColumns, coversheetDatesMatch } = utils;
+const sqs = require('./aws/sqs');
+const { sendMessage } = sqs;
+const { hasRequiredColumns, coversheetDatesMatch, buildSqsMessageBody } = utils;
 const {
     getClinicIntegrationSettings,
     getClinicById,
@@ -10,6 +13,7 @@ const {
 } = clinicGetters;
 const { getReportTransmission } = redoxTransmissionGetters;
 const { getReportById } = reportGetters;
+const { createQueuedTransmission } = redoxTransmissionCreate;
 
 async function sendReport(event) {
     console.log(event);
@@ -28,10 +32,10 @@ async function sendReport(event) {
         return;
     }
     if (hasRequiredColumns(report, clinicSettings)) {
-        const redoxDestination = await getClinicRedoxDestination(
-            clinic,
-            'media'
-        );
+        const redoxDestination = await getClinicRedoxDestination(clinic, [
+            'media',
+            'media-tiff'
+        ]);
         if (!redoxDestination) {
             console.log('No media destination found');
             return;
@@ -41,14 +45,22 @@ async function sendReport(event) {
             redoxDestination.id
         );
         if (
-            transmission.status !== 'queued' ||
-            transmission.status !== 'sucess'
+            transmission.status === 'queued' ||
+            transmission.status === 'sucess'
         ) {
-            // create transmission row and queue transmission
+            console.log(
+                'Transmission is either queued or already sent for this report and destination'
+            );
+            return;
         }
-        // check if there are pending or failed transmissions
-        // queue the redox transmission
-        // write a row in the transmissions table
+        const messageBody = await buildSqsMessageBody(
+            reportId,
+            clinic,
+            redoxDestination
+        );
+        await sendMessage(messageBody, 'url', 300);
+        await createQueuedTransmission();
+        return 'true';
     }
 }
 

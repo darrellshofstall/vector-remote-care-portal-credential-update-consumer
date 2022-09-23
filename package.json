@@ -20,6 +20,7 @@
     "license": "ISC",
     "dependencies": {
         "@vector-remote-care/event-client": "^1.0.0-beta.3",
+        "aws-sdk": "^2.1223.0",
         "vector-sequelize-model": "git+https://github.com/vector-remote-care/vector-sequelize-model.git#semver:v3.0.33"
     },
     "devDependencies": {
