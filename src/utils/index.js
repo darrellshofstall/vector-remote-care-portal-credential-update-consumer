@@ -1,5 +1,5 @@
 const clinicGetters = require('../database/read/clinic');
-const { getClinicRedoxDestination } = clinicGetters;
+// const { getClinicRedoxDestination } = clinicGetters;
 const sqs = require('../aws/sqs');
 const { sendMessage } = sqs;
 
@@ -16,10 +16,9 @@ const redoxNamePathMap = {
  * @returns {object}
  */
 async function buildSqsMessageBody(reportId, clinic, redoxDestination) {
-    const clinicRedoxSearchDestination = await getClinicRedoxDestination(
-        clinic,
-        'search'
-    );
+    const [
+        clinicRedoxSearchDestination
+    ] = await clinicGetters.getClinicRedoxDestination(clinic, 'search');
     return {
         path: getRedoxSqsPath(redoxDestination),
         httpMethod: 'POST',
@@ -44,7 +43,12 @@ function getRedoxSqsPath(redoxDestination) {
     const key = redoxDestination.RedoxModelType.name;
     return redoxNamePathMap[key];
 }
-
+/**
+ *
+ * @param {number} reportId
+ * @param {object} clinic
+ * @param {object} redoxDestination
+ */
 async function buidAndSendSqsMessage(reportId, clinic, redoxDestination) {
     const messageBody = await buildSqsMessageBody(
         reportId,

@@ -31,7 +31,7 @@
         "eslint-plugin-node": "^11.1.0",
         "eslint-plugin-prettier": "^3.1.4",
         "husky": "^6.0.0",
-        "jest": "^27.2.4",
+        "jest": "^29.0.3",
         "prettier": "^1.19.1",
         "@vector-remote-care/cdk-utils": "^3.1.10"
     }
