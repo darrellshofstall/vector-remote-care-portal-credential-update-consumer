@@ -32,15 +32,25 @@ function hasRequiredColumns(report, clinicSettings) {
         return isPassing;
     });
 }
-
-async function isReportReadyToSend(report, clinicSettings) {
+/**
+ * Checks that a reports coversheet dates match and has the required columns filled out based on the clinic settings
+ * @param {Object} report
+ * @param {Object} clinicSettings
+ * @returns {boolean}
+ */
+function isReportReadyToSend(report, clinicSettings) {
     let isPassing = true;
-    if (!coversheetDatesMatch(report)) {
+    if (!clinicSettings.isRedoxIntegrationEnabled) {
+        isPassing = false;
+        const error = 'Redox integrtion is not enabled';
+        console.log(error);
+    }
+    if (isPassing && !coversheetDatesMatch(report)) {
         isPassing = false;
         const error = 'Coversheet dates dont match';
         console.log(error);
     }
-    if (!hasRequiredColumns(report, clinicSettings)) {
+    if (isPassing && !hasRequiredColumns(report, clinicSettings)) {
         isPassing = false;
         const error =
             'Report does not have all the required columns filled out';
