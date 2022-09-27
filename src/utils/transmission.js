@@ -1,8 +1,7 @@
 const redoxTransmissionGetters = require('../database/read/redoxTransmission');
-const { getReportTransmission } = redoxTransmissionGetters;
 
 async function checkTransmissionAndStatus(reportId, redoxDestination) {
-    const transmission = await getReportTransmission(
+    const transmission = await redoxTransmissionGetters.getReportTransmission(
         reportId,
         redoxDestination.id
     );
