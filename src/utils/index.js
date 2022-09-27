@@ -1,7 +1,7 @@
+const { REDOX_SQS_URL } = process.env;
 const clinicGetters = require('../database/read/clinic');
 // const { getClinicRedoxDestination } = clinicGetters;
 const sqs = require('../aws/sqs');
-const { sendMessage } = sqs;
 
 const redoxNamePathMap = {
     media: '/send-media-transmission',
@@ -55,7 +55,7 @@ async function buidAndSendSqsMessage(reportId, clinic, redoxDestination) {
         clinic,
         redoxDestination
     );
-    await sendMessage(messageBody, 'url', 300);
+    await sqs.sendMessage(messageBody, REDOX_SQS_URL, 300);
 }
 
 module.exports = {
