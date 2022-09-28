@@ -11,7 +11,7 @@
         "synth": "rm -rf cdk.out && npx cdk synth",
         "lint": "npx eslint .",
         "lint:fix": "npx eslint . --fix",
-        "test": "jest --verbose",
+        "test": "jest --verbose --runInBand",
         "test:coverage": "jest --verbose --runInBand --coverage",
         "main": "node index.js",
         "prepare": "husky install"
