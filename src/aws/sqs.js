@@ -1,4 +1,4 @@
-const AWS = require('./init');
+const AWS = require('@aws-sdk/client-sqs');
 const sqs = new AWS.SQS();
 module.exports.sendMessage = async (
     messageBody,
