@@ -6,7 +6,7 @@ const models = require('vector-sequelize-model');
  * @param {number} redoxDestinationId
  * @returns {promise}
  */
-function getReportTransmission(reportId, redoxDestinationId) {
+async function getReportTransmission(reportId, redoxDestinationId) {
     return models.RedoxTransmission.findOne({
         where: {
             reportId,

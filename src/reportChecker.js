@@ -22,10 +22,13 @@ async function sendReport(event) {
             const error = 'No media destination found';
             throw new Error(error);
         }
-        await transmissionUtils.checkTransmissionAndStatus(
+        const statusCheck = await transmissionUtils.checkTransmissionAndStatus(
             reportId,
             redoxDestination.id
         );
+        if (!statusCheck) {
+            return;
+        }
         await utils.buidAndSendSqsMessage(reportId, clinic, redoxDestination);
         const patientId = report.Device.PortalPatient.Patient.id;
         await redoxTransmissionCreate.createQueuedTransmission(
