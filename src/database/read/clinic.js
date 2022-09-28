@@ -37,7 +37,7 @@ async function getClinicById(clinicId) {
  * @returns {object}
  */
 async function getClinicRedoxDestination(clinic, modelName) {
-    return await clinic.getRedoxDestinations({
+    return clinic.getRedoxDestinations({
         where: {
             isActive: true
         },
@@ -60,7 +60,7 @@ async function getClinicRedoxDestination(clinic, modelName) {
  * @returns {boolean}
  */
 async function getClinicBooleanSetting(clinic, settingName) {
-    return await clinic.getBooleanSetting(settingName);
+    return clinic.getBooleanSetting(settingName);
 }
 
 async function getClinicAndSettings(clinicId) {
