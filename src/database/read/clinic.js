@@ -63,6 +63,16 @@ async function getClinicBooleanSetting(clinic, settingName) {
     return clinic.getBooleanSetting(settingName);
 }
 
+/**
+ *
+ * @param {Object} clinic
+ * @param {String} settingName
+ * @returns {String}
+ */
+async function getClinicStringSetting(clinic, settingName) {
+    return await clinic.getStringSetting(settingName);
+}
+
 async function getClinicAndSettings(clinicId) {
     const clinic = await getClinicById(clinicId);
     const clinicSettings = await getClinicIntegrationSettings(clinic);
@@ -83,5 +93,6 @@ module.exports = {
     getClinicBooleanSetting,
     getClinicById,
     getClinicAndSettings,
-    getClinicMediaDestination
+    getClinicMediaDestination,
+    getClinicStringSetting
 };

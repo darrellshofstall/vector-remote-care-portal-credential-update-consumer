@@ -19,17 +19,33 @@ async function buildSqsMessageBody(reportId, clinic, redoxDestination) {
     const [
         clinicRedoxSearchDestination
     ] = await clinicGetters.getClinicRedoxDestination(clinic, 'search');
+
     return {
         path: getRedoxSqsPath(redoxDestination),
         httpMethod: 'POST',
         queryStringParameters: {
             reportId,
             clinicRedoxDestinationId: redoxDestination.id,
-            clinicRedoxSearchDestinationId: clinicRedoxSearchDestination
-                ? clinicRedoxSearchDestination.id
-                : null
+            clinicRedoxSearchDestinationId:
+                (await isDemoImportTypePulled(clinic)) &&
+                clinicRedoxSearchDestination
+                    ? clinicRedoxSearchDestination.id
+                    : null
         }
     };
+}
+
+/**
+ *
+ * @param {object} clinic
+ * @returns {boolean}
+ */
+async function isDemoImportTypePulled(clinic) {
+    const redoxDemoImportType = await clinicGetters.getClinicBooleanSetting(
+        clinic,
+        'REDOX_DEMOGRAPHIC_IMPORT_TYPE'
+    );
+    return redoxDemoImportType === 'pulled';
 }
 /**
  *
