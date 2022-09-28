@@ -7,7 +7,11 @@ const { RedoxTransmission } = models;
  * @param {number} patientId
  * @returns {promise}
  */
-function createQueuedTransmission(reportId, redoxDestinationId, patientId) {
+async function createQueuedTransmission(
+    reportId,
+    redoxDestinationId,
+    patientId
+) {
     return RedoxTransmission.create({
         reportId,
         patientId,
