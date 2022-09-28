@@ -6,7 +6,7 @@ async function checkTransmissionAndStatus(reportId, redoxDestination) {
         reportId,
         redoxDestination.id
     );
-    if (transmission.status === 'queued' || transmission.status === 'sucess') {
+    if (transmission.status === 'queued' || transmission.status === 'success') {
         result = false;
         const error =
             'Transmission is either queued or already sent for this report and destination';
