@@ -42,19 +42,12 @@ function isReportReadyToSend(report, clinicSettings) {
     let isPassing = true;
     if (!clinicSettings.isRedoxIntegrationEnabled) {
         isPassing = false;
-        const error = 'Redox integrtion is not enabled';
-        console.log(error);
     }
     if (isPassing && !coversheetDatesMatch(report)) {
         isPassing = false;
-        const error = 'Coversheet dates dont match';
-        console.log(error);
     }
     if (isPassing && !hasRequiredColumns(report, clinicSettings)) {
         isPassing = false;
-        const error =
-            'Report does not have all the required columns filled out';
-        console.log(error);
     }
     return isPassing;
 }
