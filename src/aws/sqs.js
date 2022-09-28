@@ -10,9 +10,5 @@ module.exports.sendMessage = async (
         MessageBody: JSON.stringify(messageBody),
         QueueUrl: queueUrl
     };
-    try {
-        return await sqs.sendMessage(params).promise();
-    } catch (error) {
-        console.error(error);
-    }
+    return sqs.sendMessage(params).promise();
 };
