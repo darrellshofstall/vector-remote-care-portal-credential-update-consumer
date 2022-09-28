@@ -66,10 +66,6 @@ async function getClinicBooleanSetting(clinic, settingName) {
 async function getClinicAndSettings(clinicId) {
     const clinic = await getClinicById(clinicId);
     const clinicSettings = await getClinicIntegrationSettings(clinic);
-    if (!clinicSettings.isRedoxIntegrationEnabled) {
-        const error = `Redox integration is not enabled for clinicId ${clinicId}`;
-        throw new Error(error);
-    }
     return { clinic, clinicSettings };
 }
 /**

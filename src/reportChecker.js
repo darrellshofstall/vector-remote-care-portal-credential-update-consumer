@@ -10,6 +10,9 @@ async function sendReport(event) {
     const { clinic, clinicSettings } = await clinicGetters.getClinicAndSettings(
         clinicId
     );
+    if (!clinicSettings.isRedoxIntegrationEnabled) {
+        return;
+    }
     const report = await reportGetters.getReportById(reportId);
     if (await reportUtils.isReportReadyToSend(report, clinicSettings)) {
         const redoxDestination = await clinicGetters.getClinicMediaDestination(
