@@ -5,6 +5,11 @@ const getClinicRedoxDestinationSpy = jest.spyOn(
     clinicGetters,
     'getClinicRedoxDestination'
 );
+const getClinicStringSettingSpy = jest.spyOn(
+    clinicGetters,
+    'getClinicStringSetting'
+);
+getClinicStringSettingSpy.mockImplementation(() => 'pulled');
 const sendMessageSpy = jest.spyOn(sqs, 'sendMessage');
 sendMessageSpy.mockImplementation(jest.fn);
 

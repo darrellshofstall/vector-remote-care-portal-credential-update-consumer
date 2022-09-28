@@ -41,7 +41,7 @@ async function buildSqsMessageBody(reportId, clinic, redoxDestination) {
  * @returns {boolean}
  */
 async function isDemoImportTypePulled(clinic) {
-    const redoxDemoImportType = await clinicGetters.getClinicBooleanSetting(
+    const redoxDemoImportType = await clinicGetters.getClinicStringSetting(
         clinic,
         'REDOX_DEMOGRAPHIC_IMPORT_TYPE'
     );
