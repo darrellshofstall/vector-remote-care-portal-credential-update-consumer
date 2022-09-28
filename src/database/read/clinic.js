@@ -1,4 +1,4 @@
-const models = require('vector-sequelize-model');
+const { Clinic, RedoxModelType } = require('vector-sequelize-model');
 /**
  *
  * @param {number} clinicId
@@ -29,7 +29,7 @@ async function getClinicIntegrationSettings(clinic) {
  * @returns {object}
  */
 async function getClinicById(clinicId) {
-    return models.Clinic.findByPk(clinicId);
+    return Clinic.findByPk(clinicId);
 }
 /**
  *
@@ -43,7 +43,7 @@ async function getClinicRedoxDestination(clinic, modelName) {
         },
         include: [
             {
-                model: models.RedoxModelType,
+                model: RedoxModelType,
                 required: true,
                 where: {
                     name: modelName,
@@ -74,15 +74,7 @@ async function getClinicAndSettings(clinicId) {
  * @returns {object}
  */
 async function getClinicMediaDestination(clinic) {
-    const redoxDestination = await getClinicRedoxDestination(clinic, [
-        'media',
-        'media-tiff'
-    ]);
-    if (!redoxDestination) {
-        const error = 'No media destination found';
-        throw new Error(error);
-    }
-    return redoxDestination;
+    return getClinicRedoxDestination(clinic, ['media', 'media-tiff']);
 }
 
 module.exports = {

@@ -18,6 +18,10 @@ async function sendReport(event) {
         const redoxDestination = await clinicGetters.getClinicMediaDestination(
             clinic
         );
+        if (!redoxDestination) {
+            const error = 'No media destination found';
+            throw new Error(error);
+        }
         await transmissionUtils.checkTransmissionAndStatus(
             reportId,
             redoxDestination.id
