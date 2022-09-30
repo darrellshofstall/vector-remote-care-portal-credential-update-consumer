@@ -1,0 +1,18 @@
+{
+    "title": "Report Updated",
+    "type": "object",
+    "properties": {
+        "reportId": {
+            "type": "integer",
+            "description": "ID of report"
+        },
+        "clinicId": {
+            "type": "integer",
+            "description": "ID of Clinic"
+        }
+    },
+    "required": [
+        "clinicId",
+        "reportId"
+    ]
+}

@@ -1,0 +1,7 @@
+[
+    {
+        "name": "report-update",
+        "path": "report-update.schema.json",
+        "format": "json"
+    }
+]
