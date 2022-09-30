@@ -10,7 +10,7 @@ const {
     VectorCdkLambdaEventErrorHandlerStrategy,
     VectorCdkLambdaEvent
 } = cdkUtilsLambda;
-const { REPORT_UPDATE_STREAM_NAME } = require('../src/config');
+const { REPORT_UPDATE_STREAM_NAME, SCHEMA_DIR } = require('../src/config');
 
 class ReportUpdateConsumerService extends constructs.Construct {
     constructor(scope, id, props) {
@@ -42,7 +42,9 @@ class ReportUpdateConsumerService extends constructs.Construct {
                         'vector-sequelize-model'
                     ],
                     commandHooks: {
-                        beforeBundling() {},
+                        beforeBundling(_inputDir, outputDir) {
+                            return [`cp -r ${SCHEMA_DIR} ${outputDir}`];
+                        },
                         beforeInstall() {},
                         afterBundling() {}
                     }
